@@ -1,0 +1,19 @@
+{
+  "name": "custom-promise-library",
+  "version": "1.0.0",
+  "description": "",
+  "main": "MyPromise.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^18.11.10",
+    "jest": "^27.5.1"
+  },
+  "dependencies": {
+    "tsc": "^2.0.4"
+  }
+}
