@@ -12,7 +12,14 @@ class UncaughtPromise extends Error {
 }
 
 
-class MyPromise {
+interface MyPromiseInterface<T> {
+  then(successCb: Function | undefined, failCb?: Function): MyPromise<T>
+  catch(callback: Function): MyPromise<T>
+  finally(callback: Function): MyPromise<T>
+}
+
+
+class MyPromise<T> implements MyPromiseInterface<T>{
   private thenCallbacks: Function[] = []
   private catchCallbacks: Function[] = []
   private value: any = null;
@@ -28,7 +35,7 @@ class MyPromise {
   }
 
 
-  private executeCallbacks() {
+  private executeCallbacks(): void {
     // console.log(this.state)
     if(this.state === State.Fulfilled) this.thenCallbacks.forEach(callback => callback(this.value))
     else if (this.state === State.Rejected) this.catchCallbacks.forEach(callback => callback(this.value))
@@ -36,7 +43,7 @@ class MyPromise {
 
 
   /** Here we check if the val is an instance of a Promise **/
-  private onResolve(val: any) {
+  private onResolve(val: T): void {
     queueMicrotask(() => {
       if(this.state !== State.Pending) return; // handling when resolve is being called multiple times
 
@@ -54,7 +61,7 @@ class MyPromise {
   }
 
 
-  private onReject(val: any) {
+  private onReject(val: T): void {
     // queue task
     queueMicrotask(() => {
       if(this.state !== State.Pending) return; // handling when reject is being called multiple times
@@ -77,7 +84,7 @@ class MyPromise {
 
   // then can be called multiple times on the same instance of Promise, so we save callabck functions 
   // in an array
-  public then(successCb: Function | undefined, failCb?: Function) {
+  public then(successCb: Function | undefined, failCb?: Function): MyPromise<T> {
     // console.log(this.state)
 
     // handle chaning
@@ -115,13 +122,13 @@ class MyPromise {
   }
 
 
-  public catch(callback: Function) {
+  public catch(callback: Function): MyPromise<T> {
     // simple way to do 
     return this.then(undefined, callback)
 
   }
 
-  public finally(callback: Function) {
+  public finally(callback: Function): MyPromise<T> {
     return this.then((res: any) => {
       callback()
       return res
@@ -136,7 +143,7 @@ class MyPromise {
   
   /*******  Static Methods Defiend Here  *******/
 
-  static resolve(val: any) {
+  public static resolve(val: any): MyPromise<any> {
     return new MyPromise((resolve) => {
       resolve(val)
     })
@@ -150,7 +157,7 @@ class MyPromise {
 
 
   /*** returns the first one that resolves, but doesnt return on reject ***/
-  static any(promises: MyPromise[]) {
+  static any(promises: MyPromise<any>[]) {
     let errs: any[] = [];
     let rejectedJob = 0
 
@@ -171,7 +178,7 @@ class MyPromise {
 
 
   /*** Returns the first promise ***/
-  static race(promises: MyPromise[]) {
+  static race(promises: MyPromise<any>[]) {
     return new MyPromise((resolve, reject) => {
       promises.forEach(p => {
         p.then(resolve).catch(reject)
@@ -180,7 +187,7 @@ class MyPromise {
   }
 
 
-  static allSettled(promises: MyPromise[]) {
+  static allSettled(promises: MyPromise<any>[]) {
     let res: any[] = [];
     let completedJob = 0
 
@@ -204,7 +211,7 @@ class MyPromise {
 
 
   /*** Execute all the promises and if there's any error, return the error ***/
-  static all(promises: MyPromise[]) {
+  static all(promises: MyPromise<any>[]) {
     let res: any[] = [];
     let completedJob = 0
 
@@ -227,17 +234,20 @@ class MyPromise {
 // p.then((e: any) => console.log(e))
 
 
-const p = (num: number) => {
+const p = () => {
   return new MyPromise((resolve, reject) => {
-    if(num === 1) resolve("Sam")
-    else reject("rejected!!")
+    console.log("hi")
+    setTimeout(() => {
+      resolve("Timer Finished!")
+    }, 2000)
   })
 }
 
 
-p(10)
-console.log(p)
+p()
+.then((t: any) => console.log(t))
+.catch((e: any) => console.log(e))
 
 
 
-// module.exports = MyPromise
+export default MyPromise
