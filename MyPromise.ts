@@ -227,17 +227,17 @@ class MyPromise {
 // p.then((e: any) => console.log(e))
 
 
-// const p = (num: number) => {
-//   return new MyPromise((resolve, reject) => {
-//     resolve("Sam")
-//     // else reject("rejected!!")
-//   })
-// }
-
-// p(1).then((data: any) => {
-//   console.log(data)
-// })
-// .catch((e: any) => console.log(e)) 
+const p = (num: number) => {
+  return new MyPromise((resolve, reject) => {
+    if(num === 1) resolve("Sam")
+    else reject("rejected!!")
+  })
+}
 
 
-module.exports = MyPromise
+p(10)
+console.log(p)
+
+
+
+// module.exports = MyPromise
