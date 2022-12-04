@@ -12,6 +12,7 @@ class UncaughtPromise extends Error {
 }
 
 
+/***  Public Methods  ***/
 interface MyPromiseInterface<T> {
   then(successCb: Function | undefined, failCb?: Function): MyPromise<T>
   catch(callback: Function): MyPromise<T>
