@@ -11,7 +11,6 @@ class UncaughtPromise extends Error {
   }
 }
 
-
 /***  Public Methods  ***/
 interface MyPromiseInterface<T> {
   then(successCb: Function | undefined, failCb?: Function): MyPromise<T>
@@ -23,7 +22,7 @@ interface MyPromiseInterface<T> {
 class MyPromise<T> implements MyPromiseInterface<T>{
   private thenCallbacks: Function[] = []
   private catchCallbacks: Function[] = []
-  private value: any = null;
+  private value: T = null;
   private state: State = State.Pending;
 
 
@@ -230,10 +229,6 @@ class MyPromise<T> implements MyPromiseInterface<T>{
     })
   }
 }
-
-// const p = new MyPromise((resolve, reject) => reject("sam"))
-// p.then((e: any) => console.log(e))
-
 
 const p = () => {
   return new MyPromise((resolve, reject) => {
