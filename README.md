@@ -1,3 +1,3 @@
 # Promise Implementation
 
-An attempt to implement the Promise class
+My own implementation the Promise class
