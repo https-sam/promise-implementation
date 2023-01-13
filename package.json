@@ -1,5 +1,5 @@
 {
-  "name": "custom-promise-library",
+  "name": "my-own-promise",
   "version": "1.0.0",
   "description": "",
   "main": "MyPromise.js",
